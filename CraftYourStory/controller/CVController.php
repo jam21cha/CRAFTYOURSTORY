@@ -1,9 +1,8 @@
 <?php
-require_once("../model/CVModel.php");
- 
+require_once(__DIR__ . "/../model/CVModel.php");
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
- 
-    // Build experience entries from parallel arrays
+
     $experiences = [];
     if (!empty($_POST['exp_title'])) {
         foreach ($_POST['exp_title'] as $i => $title) {
@@ -12,8 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $start   = trim($_POST['exp_start'][$i]   ?? '');
             $end     = trim($_POST['exp_end'][$i]     ?? '');
             $desc    = trim($_POST['exp_desc'][$i]    ?? '');
- 
-            // Only include entry if at least a title or company was provided
+
             if ($title !== '' || $company !== '') {
                 $experiences[] = [
                     'title'   => $title,
@@ -26,23 +24,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
- 
+
     $data = [
-        "name"        => trim($_POST['name']     ?? ''),
-        "jobtitle"    => trim($_POST['jobtitle'] ?? ''),
-        "email"       => trim($_POST['email']    ?? ''),
-        "phone"       => trim($_POST['phone']    ?? ''),
-        "location"    => trim($_POST['location'] ?? ''),
-        "skills"      => trim($_POST['skills']   ?? ''),
-        "education"   => trim($_POST['education']?? ''),
+        "name"        => trim($_POST['name']      ?? ''),
+        "jobtitle"    => trim($_POST['jobtitle']  ?? ''),
+        "email"       => trim($_POST['email']     ?? ''),
+        "phone"       => trim($_POST['phone']     ?? ''),
+        "location"    => trim($_POST['location']  ?? ''),
+        "skills"      => trim($_POST['skills']    ?? ''),
+        "education"   => trim($_POST['education'] ?? ''),
         "experiences" => $experiences,
     ];
- 
-    // Handle photo upload
+
     $data['photo'] = '';
     $photo = $_FILES['photo'] ?? null;
     if ($photo && $photo['error'] === UPLOAD_ERR_OK && $photo['size'] > 0) {
-        $uploadDir = "../assets/uploads/";
+        $uploadDir = __DIR__ . "/../assets/uploads/";
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
@@ -52,10 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $data['photo'] = $uploadPath;
         }
     }
- 
+
     $cv     = new CVModel();
     $result = $cv->processData($data);
- 
-    include("../view/displayInfo.php");
+
+    include(__DIR__ . "/../view/displayInfo.php");
 }
 ?>
