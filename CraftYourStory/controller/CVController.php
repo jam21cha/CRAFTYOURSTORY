@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../model/CVModel.php");
+require_once(__DIR__ . "/../model/CVmodel.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    $cv     = new CVModel();
+    $cv     = new CVmodel();
     $result = $cv->processData($data);
 
     include(__DIR__ . "/../view/displayInfo.php");
